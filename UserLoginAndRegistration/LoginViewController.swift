@@ -28,7 +28,6 @@ class LoginViewController: UIViewController {
         request.addValue("application/json", forHTTPHeaderField : "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) else {return}
         request.httpBody = httpBody
-        
         let session = URLSession.shared.dataTask( with:request){ (data,response,error) in
             if let response = response {
                 print(response)
@@ -40,22 +39,19 @@ class LoginViewController: UIViewController {
                     
                    if let myjson = json  as? NSDictionary{
                         let result : String = (myjson [ "value"] as? String)!
-                        if result == "true" {
-                            UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
-                            UserDefaults.standard.synchronize()
-                            let myAlert = UIAlertController(title: "Alert", message: "Registeration succefully done ", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default){ action in
-                                self.dismiss(animated: true , completion: nil)
+                        if result == "false" {
+                            DispatchQueue.main.async {
+                                self.displayMyAlertMessage (userMessage: "Registeration Sucessfully done ")
                             }
-                            myAlert.addAction(okAction)
-                            self.present(myAlert, animated: true, completion: nil)
                             print("The user is registerd ")
+                            
                         } else {
-                            print("The user is not registerd")
+                            self.displayMyAlertMessage (userMessage: "Registeration error")
+                                print("The user is not registerd ")
                         }
-                    }
-                }
-        catch {
+                        }
+                        }
+            catch {
                     print(error)
                 }
                 
@@ -68,15 +64,17 @@ class LoginViewController: UIViewController {
     
     func displayMyAlertMessage (userMessage: String){
         let myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-        myAlert.addAction(okAction)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default){(action) -> Void in
+            let viewControllerYouWantToPresent = self.storyboard?.instantiateViewController(withIdentifier: "pushView")
+            self.present(viewControllerYouWantToPresent!, animated: true, completion: nil)
+            }
         
-}
-    
+        myAlert.addAction(okAction)
+        self.present(myAlert, animated: true, completion: nil)
+    }
+    }
+
+
 
     /*
     // MARK: - Navigation
@@ -88,4 +86,4 @@ class LoginViewController: UIViewController {
     }
     */
 
-}
+

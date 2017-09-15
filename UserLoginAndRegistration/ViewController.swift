@@ -9,8 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-    let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
-
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -20,12 +20,8 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+   
     override func viewDidAppear(_ animated: Bool) {
-        
-               if (!isUserLoggedIn)
-        {
-        self.performSegue(withIdentifier: "SegueToLoginView", sender: self)
+        self.performSegue(withIdentifier: "pushView", sender: self )
     }
-}
 }
